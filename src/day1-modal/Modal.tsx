@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import ModalLayout from "./ModalLayout";
 
 interface Props {
@@ -6,11 +7,11 @@ interface Props {
 }
 
 export default function Modal({ isOpen, handleClose }: Props) {
-  return (
-    isOpen && (
-      <ModalLayout header={"모달 연습"} footer={"footer입니다."} handleClose={() => handleClose()}>
-        <div>모달 내용</div>
-      </ModalLayout>
-    )
+  if (!isOpen) return null;
+  return createPortal(
+    <ModalLayout header={"모달 연습"} footer={"footer입니다."} handleClose={() => handleClose()}>
+      <div>모달 내용</div>
+    </ModalLayout>,
+    document.getElementById("modal-root")!,
   );
 }
