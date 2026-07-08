@@ -1,34 +1,13 @@
-import { useEffect, useState } from "react";
 import Modal from "./day1-modal/Modal";
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const modalOpen = () => {
-    return setIsOpen(true);
-  };
-
-  const onClose = () => {
-    return setIsOpen(false);
-  };
-
-  useEffect(() => {
-    const handleCloseModal = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleCloseModal);
-
-    return () => window.removeEventListener("keydown", handleCloseModal);
-  }, [onClose]);
-
   return (
-    <div>
-      <button onClick={() => modalOpen()}>모달 열기</button>
-      <Modal isOpen={isOpen} handleClose={onClose} />
-    </div>
+    <Modal.Root>
+      <Modal.Trigger>모달 열기</Modal.Trigger>
+      <Modal.Content header={"모달 입니다."} footer={"footer입니다."}>
+        모달 내용
+      </Modal.Content>
+    </Modal.Root>
   );
 }
 
