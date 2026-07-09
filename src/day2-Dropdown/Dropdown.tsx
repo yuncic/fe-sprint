@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 export default function Dropdown() {
@@ -7,8 +7,21 @@ export default function Dropdown() {
     setIsDropdownOpen((prev) => !prev);
   };
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    const handleClick = (e: MouseEvent) => {
+      if (e.target instanceof Node && dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setIsDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [isDropdownOpen]);
+
   return (
-    <DropdownContainer>
+    <DropdownContainer ref={dropdownRef}>
       <button onClick={onClick}>우테코</button>
       {isDropdownOpen && (
         <ul>
