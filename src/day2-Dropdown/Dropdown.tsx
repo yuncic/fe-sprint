@@ -3,12 +3,17 @@ import styled from "styled-components";
 
 export default function Dropdown() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [highlightIndex, setHighlightIndex] = useState(-1);
+
+  //드롭다운 버튼
   const onClick = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
+  // 드롭다운 영역 Ref로 잡기
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // 드롭다운 바깥 영역 클릭 시 드롭다운 닫기
   useEffect(() => {
     if (!isDropdownOpen) return;
 
@@ -20,24 +25,32 @@ export default function Dropdown() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [isDropdownOpen]);
 
+  // esc 누를 시 드롭다운 닫기
   useEffect(() => {
     if (!isDropdownOpen) return;
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsDropdownOpen(false);
+      if (e.key == "ArrowDown") setHighlightIndex((prev) => Math.min(prev + 1, options.length - 1));
+      if (e.key === "ArrowUp") setHighlightIndex((prev) => Math.max(prev - 1, 0));
     };
     document.addEventListener("keydown", handleKeydown);
     return () => document.removeEventListener("keydown", handleKeydown);
   }, [isDropdownOpen]);
+
+  const options = ["프론트", "백엔드", "안드로이드", "찰리"];
 
   return (
     <DropdownContainer ref={dropdownRef}>
       <button onClick={onClick}>우테코</button>
       {isDropdownOpen && (
         <ul>
-          <li key={1}>프론트</li>
-          <li key={2}>백엔드</li>
-          <li key={3}>안드로이드</li>
-          <li key={4}>찰리</li>
+          {options.map((option, index) => {
+            return (
+              <li key={index} style={{ background: index === highlightIndex ? "#ddd" : "transparent" }}>
+                {option}
+              </li>
+            );
+          })}
         </ul>
       )}
     </DropdownContainer>
