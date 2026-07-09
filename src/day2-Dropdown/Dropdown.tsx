@@ -20,15 +20,24 @@ export default function Dropdown() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [isDropdownOpen]);
 
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsDropdownOpen(false);
+    };
+    document.addEventListener("keydown", handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, [isDropdownOpen]);
+
   return (
     <DropdownContainer ref={dropdownRef}>
       <button onClick={onClick}>우테코</button>
       {isDropdownOpen && (
         <ul>
-          <li>프론트</li>
-          <li>백엔드</li>
-          <li>안드로이드</li>
-          <li>찰리</li>
+          <li key={1}>프론트</li>
+          <li key={2}>백엔드</li>
+          <li key={3}>안드로이드</li>
+          <li key={4}>찰리</li>
         </ul>
       )}
     </DropdownContainer>
