@@ -52,7 +52,15 @@ export default function Dropdown() {
         <ul>
           {options.map((option, index) => {
             return (
-              <li key={index} style={{ background: index === highlightIndex ? "#ddd" : "transparent" }}>
+              <li
+                key={index}
+                onClick={() => {
+                  setSelectedValue(option);
+                  setIsDropdownOpen(false);
+                  setHighlightIndex(-1);
+                }}
+                style={{ background: index === highlightIndex ? "#ddd" : "transparent" }}
+              >
                 {option}
               </li>
             );
