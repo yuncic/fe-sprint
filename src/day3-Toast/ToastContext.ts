@@ -1,10 +1,13 @@
 import { createContext } from "react";
 
-interface ToastContextType {
+export interface ToastItem {
   id: number;
   type: "alert" | "success" | "error";
   message: string;
-  time: number;
+}
+
+interface ToastContextType {
+  addToast: (message: string, type: ToastItem["type"]) => void;
 }
 
 export const ToastContext = createContext<ToastContextType | null>(null);

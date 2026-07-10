@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { ModalContext } from "./ModalContext";
 import useModalContext from "./useModalContext";
 import ModalLayout from "./ModalLayout";
+import { useToastContext } from "../day3-Toast/useToastContext";
 
 function Root({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,17 @@ function Root({ children }: { children: React.ReactNode }) {
 
 function Trigger({ children }: { children: React.ReactNode }) {
   const { open } = useModalContext();
-  return <button onClick={open}>{children}</button>;
+  const { addToast } = useToastContext();
+  return (
+    <button
+      onClick={() => {
+        open();
+        addToast("모달이 열렸습니다!", "success");
+      }}
+    >
+      {children}
+    </button>
+  );
 }
 
 interface ContentProps {
