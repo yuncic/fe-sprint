@@ -9,19 +9,22 @@ interface Props {
 export default function TreeNode({ node, path, extendedPaths, onToggle }: Props) {
   return (
     <div>
-      <p style={{ color: "blue", fontSize: "20px", fontWeight: "bold" }}>{node.name}</p>
-      {node.children?.map((child) => {
-        const childPath = `${path}/${child.name}`;
-        return (
-          <TreeNode
-            node={child}
-            path={childPath}
-            extendedPaths={extendedPaths}
-            onToggle={onToggle}
-            key={childPath}
-          ></TreeNode>
-        );
-      })}
+      <p onClick={() => onToggle(path)} style={{ color: "blue", fontSize: "20px", fontWeight: "bold" }}>
+        {node.name}
+      </p>
+      {extendedPaths.has(path) &&
+        node.children?.map((child) => {
+          const childPath = `${path}/${child.name}`;
+          return (
+            <TreeNode
+              node={child}
+              path={childPath}
+              extendedPaths={extendedPaths}
+              onToggle={onToggle}
+              key={childPath}
+            ></TreeNode>
+          );
+        })}
     </div>
   );
 }

@@ -11,7 +11,7 @@ function App() {
   function onToggle(path: string) {
     const newSet = new Set(expandedPaths);
     if (newSet.has(path)) {
-      newSet.has(path);
+      newSet.delete(path);
     } else {
       newSet.add(path);
     }
