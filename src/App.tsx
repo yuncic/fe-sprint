@@ -1,8 +1,22 @@
+import { useState } from "react";
 import Modal from "./day1-modal/Modal";
 import Dropdown from "./day2-Dropdown/Dropdown";
 import ToastProvider from "./day3-Toast/ToastProvider";
+import { mockTree } from "./day4-Tree/mockData";
+import TreeNode from "./day4-Tree/TreeNode";
 
 function App() {
+  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set());
+
+  function onToggle(path: string) {
+    const newSet = new Set(expandedPaths);
+    if (newSet.has(path)) {
+      newSet.has(path);
+    } else {
+      newSet.add(path);
+    }
+    setExpandedPaths(newSet);
+  }
   return (
     <>
       <ToastProvider>
@@ -14,6 +28,7 @@ function App() {
         </Modal.Root>
         <Dropdown />
       </ToastProvider>
+      <TreeNode node={mockTree} path={mockTree.name} extendedPaths={expandedPaths} onToggle={onToggle} />
     </>
   );
 }
