@@ -15,7 +15,14 @@ function App() {
             모달 내용
           </Modal.Content>
         </Modal.Root>
-        <Dropdown />
+        <Dropdown options={["프론트", "백엔드", "안드로이드", "찰리"]} />
+        <Dropdown
+          options={[
+            { id: 1, name: "찰리" },
+            { id: 2, name: "프론트" },
+          ]}
+          getLabel={(o) => o.name}
+        />
       </ToastProvider>
       <TreeProvider>
         <TreeNode node={mockTree} path={mockTree.name} />

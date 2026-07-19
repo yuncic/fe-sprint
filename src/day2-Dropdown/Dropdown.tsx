@@ -1,10 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-export default function Dropdown() {
+interface Props<T> {
+  options: T[];
+  onSelect?: (option: T) => void;
+  getLabel?: (option: T) => string;
+}
+
+export default function Dropdown<T>({ options, onSelect, getLabel = (option) => String(option) }: Props<T>) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(-1);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<T | null>(null);
+  const selectOption = (option: T) => {
+    setSelectedValue(option);
+    onSelect?.(option);
+    setIsDropdownOpen(false);
+    setHighlightIndex(-1);
+  };
 
   //드롭다운 버튼
   const onClick = () => {
@@ -34,20 +46,16 @@ export default function Dropdown() {
       if (e.key == "ArrowDown") setHighlightIndex((prev) => Math.min(prev + 1, options.length - 1));
       if (e.key === "ArrowUp") setHighlightIndex((prev) => Math.max(prev - 1, 0));
       if (e.key === "Enter" && highlightIndex !== -1) {
-        setSelectedValue(options[highlightIndex]);
-        setIsDropdownOpen(false);
-        setHighlightIndex(-1);
+        selectOption(options[highlightIndex]);
       }
     };
     document.addEventListener("keydown", handleKeydown);
     return () => document.removeEventListener("keydown", handleKeydown);
   }, [isDropdownOpen, highlightIndex]);
 
-  const options = ["프론트", "백엔드", "안드로이드", "찰리"];
-
   return (
     <DropdownContainer ref={dropdownRef}>
-      <button onClick={onClick}>{selectedValue ?? "우테코"}</button>
+      <button onClick={onClick}>{selectedValue !== null ? getLabel(selectedValue) : "우테코"}</button>
       {isDropdownOpen && (
         <ul>
           {options.map((option, index) => {
@@ -55,13 +63,11 @@ export default function Dropdown() {
               <li
                 key={index}
                 onClick={() => {
-                  setSelectedValue(option);
-                  setIsDropdownOpen(false);
-                  setHighlightIndex(-1);
+                  selectOption(option);
                 }}
                 style={{ background: index === highlightIndex ? "#ddd" : "transparent" }}
               >
-                {option}
+                {getLabel(option)}
               </li>
             );
           })}
